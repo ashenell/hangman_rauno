@@ -1,11 +1,13 @@
 package listeners;
 
+import models.DataScores;
 import models.Model;
 import views.View;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
 
 /**
  * Klass nupu Saada täht jaoks
@@ -43,12 +45,16 @@ public class ButtonSend implements ActionListener {
         char guessedLetter = enteredChars.charAt(0);
         String guessWord = model.getWordToGuess();
         String[] guessList = guessWord.split("");
-        System.out.println("GuessList to see whats inside: " + guessWord + guessList);
+        //System.out.println("GuessList to see whats inside: " + guessWord + guessList);
         boolean correct = true;
         for (int i = 0; i < guessList.length; i++){
             if (guessList[i].equals(enteredChars)){
                 model.getWordNewOfLife().setCharAt(i, guessedLetter);
-                System.out.println("What index of:  " + i);
+                //view.getLblGuessWord().setText(model.getWordNewOfLife().toString());
+                view.getLblGuessWord().setText(model.addSpaceBetween(model.getWordNewOfLife().toString()));
+                //System.out.println(model.getWordNewOfLife());
+                //System.out.println("What index of:  " + i);
+
                 correct = false;
             }
         }
@@ -64,7 +70,9 @@ public class ButtonSend implements ActionListener {
         if (!model.getWordNewOfLife().toString().contains("_")) {
             model.askPlayerName();
             model.getPlayerName();
+            model.insertScoreToTable();
             view.setEndGame();
+
         }
         if (!(model.getCountMissedWords() < 7)) {
             System.out.println("counter: " + model.getCountMissedWords());

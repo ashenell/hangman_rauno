@@ -43,8 +43,10 @@ public class ButtonNew implements ActionListener {
         view.getTxtChar().requestFocus(); // Peale selle nupu klikkimist anna fookus teksti kastile
         String selectedCategory = view.getCmbCategory().getSelectedItem().toString();
         model.randomWordsFromCategoriesList(selectedCategory);
-        String wordOfNew = String.valueOf(model.getWordNewOfLife());
+        String wordOfNew = model.addSpaceBetween(String.valueOf(model.getWordNewOfLife()));
         view.getLblGuessWord().setText(wordOfNew);
+
+
 
     }
 }

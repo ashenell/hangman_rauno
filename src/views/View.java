@@ -162,7 +162,6 @@ public class View extends JFrame {
         getTxtChar().setText("");   // Sisestatud tähe tühjendamine
         getLblWrongInfo().setText("Valesti 0 täht(e). "); // Muuda vigade teavitus vaikimisi tekstiks
         getLblWrongInfo().setForeground(Color.BLACK); // Muuda teksti värv vaikimsii mustaks
-        getLblGuessWord().setText("H A _ _ A _ E  _ _ N _ I _ A");
-        model.setCountMissedWords(0);
+
     }
 }

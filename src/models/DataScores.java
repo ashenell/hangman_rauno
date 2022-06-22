@@ -1,6 +1,7 @@
 package models;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Klass mis sisaldab edetabeli sisu words.db olevat tabelit scores
@@ -36,6 +37,8 @@ public class DataScores {
         this.guessWord = guessWord;
         this.missingLetters = missingLetters;
     }
+
+
 
     /**
      * Tagastab kuupäeva ja aja

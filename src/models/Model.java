@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -50,10 +51,9 @@ public class Model {
     private String wordToGuess;
     private StringBuilder wordNewOfLife;
     private String wordGuessed;
-    private int countMissedWords;
+    public int countMissedWords;
 
     Connection connection = null;
-    private char[] correct;
     private String playerName;
 
 
@@ -182,6 +182,7 @@ public class Model {
     }
     public void setCountMissedWords(int countMissedWords) {
         this.countMissedWords = countMissedWords;
+
     }
 
     /**
@@ -199,11 +200,11 @@ public class Model {
 
     public void randomWordsFromCategoriesList (String selectedCategory){
         Random random = new Random();
-        System.out.println("For a test to see current category: " + selectedCategory);
+        //System.out.println("For a test to see current category: " + selectedCategory);
         List<String> guessWordsToList = new ArrayList<>();
         if (selectedCategory.equals("Kõik kategooriad")){
             wordToGuess = dataWords.get(random.nextInt(dataWords.size())).getWord();
-            System.out.println("Test for random word: " + wordToGuess.toUpperCase());
+            //System.out.println("Test for random word: " + wordToGuess.toUpperCase());
         } else {
             for (DataWords word : dataWords){
                 if (selectedCategory.equals(word.getCategory())) {
@@ -212,7 +213,7 @@ public class Model {
                 }
             }
             wordToGuess = guessWordsToList.get(random.nextInt(guessWordsToList.size()));
-            System.out.println("Test for random word from current category: " + wordToGuess.toUpperCase());
+            //System.out.println("Test for random word from current category: " + wordToGuess.toUpperCase());
         }
         this.wordToGuess = wordToGuess.toUpperCase();
         hideLetters();
@@ -224,19 +225,24 @@ public class Model {
         for (int i = 0; i < wordToGuess.length(); i++) {
             correct.setCharAt(i, '_');
         }
-
         this.wordNewOfLife = correct;
-        addSpaceBetween();
-        System.out.println("Test to see is word hidden: " + wordNewOfLife);
+        //System.out.println("Test to see is word hidden: " + wordNewOfLife);
 
     }
 
 
-    private void addSpaceBetween() {
-        String s = String.valueOf(wordNewOfLife);
-        s = String.join(" ", s.split(""));
-        System.out.println(s);
-        this.wordNewOfLife = new StringBuilder(s);
+    public String addSpaceBetween(String word) {
+        //@TO-DO
+        /**
+         * @ something to try https://stackoverflow.com/questions/41953388/java-split-and-trim-in-one-shot
+         * Don't use trim method not going to work as needed
+         */
+        String[] wordListOfList= word.split("");
+        StringJoiner joiner = new StringJoiner(" ");
+        for (String words : wordListOfList){
+            joiner.add(words);
+        }
+        return joiner.toString();
     }
 
     public String getPlayerName() {
@@ -250,6 +256,29 @@ public class Model {
         }
     }
 
+    public void insertScoreToTable (){
+        /**
+         * TO-DO example is here https://alvinalexander.com/java/java-mysql-insert-example-preparedstatement/
+         * TO-DO example to format dates https://stackoverflow.com/questions/64759668/what-is-the-correct-datetimeformatter-pattern-for-datetimeoffset-column#:~:text=You%20need%20to%20use%20the,SSSSSS%20xxx%20.
+         */
+
+        String sql = "INSERT INTO scores (playertime, playername, guessword, wrongcharacters) VALUES (?, ?, ?, ?)";
+        DataScores endTime = new DataScores(LocalDateTime.now(), getPlayerName(), getWordToGuess(), getMissedLetters().toString());
+        try {
+            Connection conn = this.dbConnection();
+            PreparedStatement preparedStmt = conn.prepareStatement(sql);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String playerTime = endTime.getGameTime().format(formatter);
+            preparedStmt.setString(1, playerTime);
+            preparedStmt.setString(2, endTime.getPlayerName());
+            preparedStmt.setString(3, endTime.getGuessWord());
+            preparedStmt.setString(4, endTime.getMissingLetters());
+            preparedStmt.executeUpdate();
+            scoreSelect();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 
