@@ -5,6 +5,7 @@ import models.Model;
 import views.View;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
@@ -61,6 +62,7 @@ public class ButtonSend implements ActionListener {
 
         if (correct){
             model.getMissedLetters().add(enteredChars);
+            view.getLblWrongInfo().setForeground(Color.RED);
         }
 
 
@@ -75,8 +77,8 @@ public class ButtonSend implements ActionListener {
 
         }
         if (!(model.getCountMissedWords() < 7)) {
-            System.out.println("counter: " + model.getCountMissedWords());
-            JOptionPane.showMessageDialog(null, "Game over", "Lost the game", JOptionPane.PLAIN_MESSAGE);
+            //System.out.println("counter: " + model.getCountMissedWords());
+            JOptionPane.showMessageDialog(null, "Kaotasid mängu", "Mäng läbi", JOptionPane.PLAIN_MESSAGE);
             view.setEndGame();
 
         }

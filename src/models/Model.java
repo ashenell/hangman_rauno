@@ -194,6 +194,10 @@ public class Model {
         return missedLetters;
     }
 
+    public void setMissedLetters(List<String> missedLetters) {
+        this.missedLetters = missedLetters;
+    }
+
     public String getWordToGuess() {
         return wordToGuess;
     }
@@ -250,7 +254,7 @@ public class Model {
     }
 
     public void askPlayerName() {
-        playerName = JOptionPane.showInputDialog("Enter your name");
+        playerName = JOptionPane.showInputDialog("Sisesta oma nimi");
         if (playerName.length() < 2) {
             askPlayerName();
         }
@@ -263,7 +267,8 @@ public class Model {
          */
 
         String sql = "INSERT INTO scores (playertime, playername, guessword, wrongcharacters) VALUES (?, ?, ?, ?)";
-        DataScores endTime = new DataScores(LocalDateTime.now(), getPlayerName(), getWordToGuess(), getMissedLetters().toString());
+        String removeBrackets = getMissedLetters().toString().replace("[", "").replace("]", "");
+        DataScores endTime = new DataScores(LocalDateTime.now(), getPlayerName(), getWordToGuess(), removeBrackets);
         try {
             Connection conn = this.dbConnection();
             PreparedStatement preparedStmt = conn.prepareStatement(sql);

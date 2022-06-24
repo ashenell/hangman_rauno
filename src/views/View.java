@@ -5,6 +5,7 @@ import models.Model;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * Klass View (Üldine)
@@ -161,6 +162,7 @@ public class View extends JFrame {
         getBtnCancel().setVisible(false);  // Mängu ei saa enam katkestada
         getTxtChar().setText("");   // Sisestatud tähe tühjendamine
         getLblWrongInfo().setText("Valesti 0 täht(e). "); // Muuda vigade teavitus vaikimisi tekstiks
+        model.setMissedLetters(new ArrayList<>());
         getLblWrongInfo().setForeground(Color.BLACK); // Muuda teksti värv vaikimsii mustaks
 
     }
